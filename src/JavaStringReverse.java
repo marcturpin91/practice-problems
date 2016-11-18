@@ -28,13 +28,18 @@ public class JavaStringReverse {
         // For even length strings, this loop checks that all inverse characters match.
         // For odd length strings, this loop skips the middle element given that it will not
         // affect the results of the string being a palindrome or not.
+        boolean isPalindrome = true;
         for(int i = 0; i < (stringLength/2); i++){
-            if(A.charAt(i) != A.charAt(stringLength-i)){
-                System.out.println("No");
+            if(A.charAt(i) != A.charAt((stringLength-1-i))){
+                isPalindrome = false;
                 break;
             }
         }
-        System.out.println("Yes");
+        if (isPalindrome){
+            System.out.println("Yes");
+        } else{
+            System.out.println("No");
+        }
     }
 
 }
