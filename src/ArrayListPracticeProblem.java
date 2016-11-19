@@ -1,6 +1,8 @@
 /**
  * Created by Marc on 2016-11-18.
  */
+import java.util.Scanner;
+import java.util.ArrayList;
 public class ArrayListPracticeProblem{
 
     /*
@@ -52,6 +54,35 @@ public class ArrayListPracticeProblem{
      */
 
     public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        // first line and int is amount of lists
+        ArrayList list = new ArrayList();
+        int amountOfArrays = sc.nextInt();
+        sc.nextLine(); // jumps to second line
+        // outer loop is arrays
+        for(int i = 0; i < amountOfArrays; i++){
+
+            // inner loop is for elements in an array
+            int numOfElements = sc.nextInt();
+            list.add(i, new int[numOfElements]);
+            for(int j = 0; j < numOfElements; j++){
+                ((int[])list.get(i))[j] = sc.nextInt();
+            }
+            sc.nextLine(); // skips to next line after consuming every int for an array
+        }
+
+        int numOfQueries = sc.nextInt();
+        sc.nextLine(); // jumps to nextline, the start of the queries
+        for(int k = 0; k < numOfQueries; k++){
+            int arrayX = sc.nextInt();
+            int elementY = sc.nextInt();
+            try{
+                System.out.println(((int[])list.get(arrayX-1))[elementY-1]);
+            } catch(ArrayIndexOutOfBoundsException e){
+                System.out.println("ERROR!");
+            }
+            sc.nextLine(); // jumps to next line of queries
+        }
 
     }
 
