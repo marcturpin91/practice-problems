@@ -5,6 +5,22 @@ import java.util.Scanner;
 import java.util.HashSet;
 public class UniquePairsUsingHashSets{
 
+    /*
+    Context:
+    You are given N pairs of strings. Two pairs (a,b) and (c,d) are identical
+    if a=c and b=d. That also implies (a,b) is not same as (b,a). After taking
+    each pair as input, you need to print number of unique pairs you currently have.
+    Complete the code in the editor to solve this problem.
+
+    Input format:
+    In the first line, there will be an integer T denoting number of pairs.
+    Each of the next T lines will contain two strings separated by a single space.
+
+    Output:
+    Print T lines indicating at each one of them the amount of unique pairs
+    at that point.
+    */
+
     public static void main(String[] args){
 //        Scanner sc = new Scanner(System.in);
 //        HashSet<String> uniqueNames = new HashSet<>();
