@@ -49,21 +49,13 @@ heraldo 50
 */
 
 // Write your Checker class here
-
 class Checker implements Comparator<Player>{
+    // comparing left object to right object will sort by increasing order, right to left will sort by decreasing
     public int compare(Player a, Player b){
-        if(a.score < b.score){
-            return 1;
-        } else if(a.score > b.score){
-            return -1;
-        } else {
-            if(a.name.compareTo(b.name) > 0){
-                return 1;
-            } else if(a.name.compareTo(b.name) < 0){
-                return -1;
-            } else{
-                return 0;
-            }
+        if(b.score == a.score){
+            return (a.name.compareTo(b.name)); // in ascending order for names if they are equal score i.e. alex before bob
+        } else{
+            return b.score - a.score; // decreasing order for scores i.e. 150 before 100
         }
     }
 }
