@@ -39,7 +39,12 @@ public class GenericsPrintChallenge{
 
         }
         // Start solution here:
-    class Printer{
-        
+     static class Printer{
+
+            public <E> void printArray(E[] array){
+                for(E e : array){
+                    System.out.println(e);
+                }
+            }
     }
 }
