@@ -38,15 +38,38 @@ public class MaxUniqueNumbersSubArray{
         Deque deque = new ArrayDeque<>();
         int n = sc.nextInt();
         int m = sc.nextInt();
+        int maxUniqueNums = 0;
+        int currentUniqueNums = 0;
 
-        for(int i = 0; i < n; i++){
+        // if  maxUniqueNums == m, break and print maxNum since we have reached max possible size
+        for(int i = 0; i < n && maxUniqueNums < m; i++){
             int num = sc.nextInt();
+            if(i < m){
+                if(!deque.contains(num)){
+                    currentUniqueNums++;
+                }
+                deque.add(num);
+            }
+            // since we are at the size M of the subarray at this point ( i >= m )
+            // we start popping at each iteration before adding back in to keep size m.
+            else {
+                // here we are checking if the element we are 'popping' was unique to the deque
+                // if it was, we decrement the currentUniqueNums to reflect that
+                if(!deque.contains(deque.pop())){
+                    currentUniqueNums--;
+                }
+                // if the new num we are adding is unique, increment currentUniqueNums
+                if(!deque.contains(num)){
+                    currentUniqueNums++;
+                }
+                // finally, add num whether it is unique or not, to keep size m of the deque
+                deque.add(num);
+            }
+            // at the end of the iteration, update maxUniqueNums if needed
+            if(currentUniqueNums > maxUniqueNums){
+                maxUniqueNums = currentUniqueNums;
+            }
         }
-    }
-
-    // solution using Deque
-    public int maxUniqueNumSub(Deque dq){
-
-        return 0;
+        System.out.println(maxUniqueNums);
     }
 }
