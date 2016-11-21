@@ -29,6 +29,7 @@ Constraints:
 M <= N
 */
 
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Deque;
 import java.util.ArrayDeque;
@@ -36,38 +37,39 @@ public class MaxUniqueNumbersSubArray{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         Deque deque = new ArrayDeque<>();
+        HashMap<Integer, Integer> setOfNumbers = new HashMap<>();
         int n = sc.nextInt();
         int m = sc.nextInt();
         int maxUniqueNums = 0;
-        int currentUniqueNums = 0;
 
         // if  maxUniqueNums == m, break and print maxNum since we have reached max possible size
         for(int i = 0; i < n && maxUniqueNums < m; i++){
             int num = sc.nextInt();
-            if(i < m){
-                if(!deque.contains(num)){
-                    currentUniqueNums++;
-                }
-                deque.add(num);
+            if(setOfNumbers.get(num) == null){
+                setOfNumbers.put(num, 1);
+            } else{
+                setOfNumbers.put(num, setOfNumbers.get(num)+1);
             }
+
             // since we are at the size M of the subarray at this point ( i >= m )
-            // we start popping at each iteration before adding back in to keep size m.
-            else {
+            // we start popping at each iteration before adding a new num in to keep size m
+            if(i >= m){
+
                 // here we are checking if the element we are 'popping' was unique to the deque
-                // if it was, we decrement the currentUniqueNums to reflect that
-                if(!deque.contains(deque.pop())){
-                    currentUniqueNums--;
+                // if it was, we remove it from our hashmap to reflect the proper size of unique numbers
+                int poppedNum = (int)deque.pop();
+                int occurences = setOfNumbers.get(poppedNum);
+                if(occurences > 1){
+                    setOfNumbers.put(poppedNum, occurences-1);
+                } else{
+                    setOfNumbers.remove(poppedNum);
                 }
-                // if the new num we are adding is unique, increment currentUniqueNums
-                if(!deque.contains(num)){
-                    currentUniqueNums++;
-                }
-                // finally, add num whether it is unique or not, to keep size m of the deque
-                deque.add(num);
             }
+            // finally, add num whether it is unique or not, to keep size m of the deque
+            deque.add(num);
             // at the end of the iteration, update maxUniqueNums if needed
-            if(currentUniqueNums > maxUniqueNums){
-                maxUniqueNums = currentUniqueNums;
+            if(setOfNumbers.size() > maxUniqueNums){
+                maxUniqueNums = setOfNumbers.size();
             }
         }
         System.out.println(maxUniqueNums);
