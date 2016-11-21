@@ -34,7 +34,7 @@ class MyCalculator implements AdvancedArithmetic{
         // won't waste time in loop going through things after halfway since it's imposible to be a divisor apart from itself
         int lastPosibleDivisor = n/2;
         // goes up to halfway
-        for(int i = 1; i < lastPosibleDivisor+1; i++){
+        for(int i = 1; i <= lastPosibleDivisor; i++){
             if(n % i ==0){
                 sumOfDivisors += i;
             }
