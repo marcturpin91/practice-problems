@@ -1,4 +1,5 @@
 #Intellij IDE Files
 .idea/
 *.iml
-out/
+out
+src/FormatStringLicenseKey.java
