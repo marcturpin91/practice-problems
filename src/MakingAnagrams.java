@@ -33,38 +33,24 @@ import java.math.*;
 import java.util.regex.*;
 public class MakingAnagrams {
     public static int numberNeeded(String first, String second) {
-        HashMap<Character, Integer> smallerSet = new HashMap<>();
-        int numberOfCharsToRemove = 0;
+        HashMap<Character, Integer> characterSet = new HashMap<>();
         char currentChar;
-        String smallerString = (first.length() <= second.length() ? first : second);
-        String biggerString = (first.length() > second.length() ? first : second);
-            for (int i = 0; i < smallerString.length(); i++) {
-                currentChar = smallerString.charAt(i);
-                if (smallerSet.containsKey(currentChar)) {
-                    smallerSet.put(currentChar, smallerSet.get(currentChar) + 1);
-                } else {
-                    smallerSet.put(currentChar, 1);
-                }
-            }
-            // going through bigger string
-            for(int j = 0; j < biggerString.length(); j++){
-                currentChar = biggerString.charAt(j);
-                // if character is not in set, that equates to another char we need to remove to be an anagram
-                if(!smallerSet.containsKey(currentChar)){
-                    numberOfCharsToRemove++;
-                } else {
-                    // these two conditions will essentially remove matching characters
-                    if(smallerSet.get(currentChar) > 1){
-                        smallerSet.put(currentChar, smallerSet.get(currentChar)-1);
-                    } else {
-                        smallerSet.remove(currentChar);
-                    }
-                }
-
+        int currentAmount;
+        for(int i = 0; i < first.length(); i++){
+            currentChar = first.charAt(i);
+            currentAmount = (characterSet.containsKey(currentChar)? characterSet.get(currentChar) : 0);
+            characterSet.put(currentChar, currentAmount+1);
         }
-        // adds remaining unique characters from smaller set
-        for(int x : smallerSet.values()){
-            numberOfCharsToRemove += x;
+
+        for(int j = 0; j < second.length(); j++){
+            currentChar = second.charAt(j);
+            currentAmount = (characterSet.containsKey(currentChar)? characterSet.get(currentChar) : 0);
+            characterSet.put(currentChar, currentAmount-1);
+        }
+
+        int numberOfCharsToRemove = 0;
+        for(int x : characterSet.values()){
+            numberOfCharsToRemove += Math.abs(x);
         }
         return numberOfCharsToRemove;
     }
