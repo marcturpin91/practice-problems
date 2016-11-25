@@ -50,46 +50,27 @@ import java.util.regex.*;
 public class IsBalancedChallenge {
 
     public static boolean isBalanced(String expression) {
-        Stack<Character> leftBrackets = new Stack<>();
-        for(int i = 0; i < expression.length(); i++){
-                char singleBracket = expression.charAt(i);
-                char poppedChar;
-                switch (singleBracket){
-                    case '[':
-                        leftBrackets.add(singleBracket);
-                        break;
-                    case '{':
-                        leftBrackets.add(singleBracket);
-                        break;
-                    case '(':
-                        leftBrackets.add(singleBracket);
-                        break;
-                    case ']':
-                        if(leftBrackets.isEmpty())
-                            return false;
-                       poppedChar = leftBrackets.pop();
-                        if(poppedChar != '[')
-                            return false;
-                        break;
-                    case '}':
-                        if(leftBrackets.isEmpty())
-                            return false;
-                        poppedChar = leftBrackets.pop();
-                        if(poppedChar != '{')
-                            return false;
-                        break;
-                    case ')':
-                        if(leftBrackets.isEmpty())
-                            return false;
-                        poppedChar = leftBrackets.pop();
-                        if(poppedChar != '(')
-                            return false;
-                        break;
-                    default:
+        // checks 1st bit to see if it's uneven -- if it is, impossible to have balanced brackets
+        if((expression.length() & 1) == 1)
+            return false;
+
+        Stack<Character> matchingBrackets = new Stack<>();
+        for(char bracket : expression.toCharArray()) {
+            switch (bracket) {
+                case '[': matchingBrackets.add(']');
+                    break;
+                case '{': matchingBrackets.add('}');
+                    break;
+                case '(': matchingBrackets.add(')');
+                    break;
+                default:
+                    if (matchingBrackets.isEmpty() || bracket != matchingBrackets.peek())
                         return false;
-                }
+                    matchingBrackets.pop();
+                    break;
             }
-        return leftBrackets.isEmpty();
+        }
+        return matchingBrackets.isEmpty();
     }
 
     public static void main(String[] args) {
