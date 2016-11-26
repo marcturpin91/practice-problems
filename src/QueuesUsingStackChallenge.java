@@ -50,25 +50,40 @@ import java.text.*;
 import java.math.*;
 import java.util.regex.*;
 
-public class QueueUsingStackChallenge {
+public class QueuesUsingStackChallenge {
     public static class MyQueue<T> {
         Stack<T> stackNewestOnTop = new Stack<T>();
         Stack<T> stackOldestOnTop = new Stack<T>();
 
         public void enqueue(T value) { // Push onto newest stack
-            // implement
+            stackOldestOnTop.push(value);
         }
 
         public T peek() {
-            // implement
-            return null; // replace
+            if(stackNewestOnTop.isEmpty() && !stackOldestOnTop.isEmpty()){
+                while(!stackOldestOnTop.isEmpty()){
+                    // reverses order and fills newestontop stack
+                    stackNewestOnTop.push(stackOldestOnTop.pop());
+                }
+            }
+            return stackNewestOnTop.peek();
         }
 
         public T dequeue() {
-            // implement
-            return null; // replace
+            if(stackNewestOnTop.isEmpty()){
+                while(!stackOldestOnTop.isEmpty()){
+                    // reverses order so it acts like a queue
+                    stackNewestOnTop.push(stackOldestOnTop.pop());
+                }
+            }
+            if(!stackNewestOnTop.isEmpty()){
+                return stackNewestOnTop.pop();
+            } else {
+                return null;
+            }
         }
     }
+
 
 
     public static void main(String[] args) {
