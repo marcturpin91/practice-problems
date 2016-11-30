@@ -51,12 +51,28 @@ public class RunningMedianChallenge {
         for (int a_i = 0; a_i < n; a_i++) {
             // do printing here of running median
 
-            if((a_i & 1) == 1){
+            // this just ensures we alternate between insertions
+            if((a_i & 1) != 1){
                 maxHeap.add(in.nextInt());
 
             } else {
                 minHeap.add(in.nextInt());
+            }
 
+            if(a_i >= 1 && maxHeap.peek() > minHeap.peek()){
+                int topMax = maxHeap.poll();
+                int topMin = minHeap.poll();
+                maxHeap.add(topMin);
+                minHeap.add(topMax);
+            }
+
+            // this indicates we've inserted into maxheap, thus we have odd amount of elements
+            if((a_i & 1) != 1){
+                System.out.println(maxHeap.peek() / 1.0);
+            }
+            // case where we have even number of elements
+            else {
+                System.out.println( (maxHeap.peek() + minHeap.peek()) / 2.0);
             }
 
 
@@ -172,22 +188,23 @@ public class RunningMedianChallenge {
 
         public void heapifyDown() {
             // while left child exist and a child is bigger than parent, swap with the smallest of the child that is bigger than parent
-            isEmpty("heapifyDown()");
-            int currentIndex = 0;
-            while(hasLeftChild(currentIndex)){
-                int biggerChildIndex = getLeftChildIndex(currentIndex);
+//            isEmpty("heapifyDown()");
+            if(this.size > 0) {
+                int currentIndex = 0;
+                while (hasLeftChild(currentIndex)) {
+                    int biggerChildIndex = getLeftChildIndex(currentIndex);
 
-                if(hasRightChild(currentIndex) && getRightChild(currentIndex) > getLeftChild(currentIndex)){
-                    biggerChildIndex = getRightChildIndex(currentIndex);
-                }
+                    if (hasRightChild(currentIndex) && getRightChild(currentIndex) > getLeftChild(currentIndex)) {
+                        biggerChildIndex = getRightChildIndex(currentIndex);
+                    }
 
-                if(items[currentIndex] > items[biggerChildIndex]){
-                    break;
+                    if (items[currentIndex] > items[biggerChildIndex]) {
+                        break;
+                    } else {
+                        swap(currentIndex, biggerChildIndex);
+                    }
+                    currentIndex = biggerChildIndex;
                 }
-                else {
-                    swap(currentIndex, biggerChildIndex);
-                }
-                currentIndex = biggerChildIndex;
             }
         }
 
@@ -207,23 +224,25 @@ public class RunningMedianChallenge {
 
         public void heapifyDown(){
             // while left child exist and a child is smaller than parent, swap with the smallest child
-            int currentIndex = 0;
-            while(hasLeftChild(currentIndex)) {
-                int smallerChildIndex = getLeftChildIndex(currentIndex);
+            if(this.size > 0) {
 
-                if(    hasRightChild(currentIndex)
-                        && getRightChild(currentIndex) < getLeftChild(currentIndex)
-                        ) {
-                    smallerChildIndex = getRightChildIndex(currentIndex);
-                }
+                int currentIndex = 0;
+                while (hasLeftChild(currentIndex)) {
+                    int smallerChildIndex = getLeftChildIndex(currentIndex);
 
-                if(items[currentIndex] < items[smallerChildIndex]) {
-                    break;
+                    if (hasRightChild(currentIndex)
+                            && getRightChild(currentIndex) < getLeftChild(currentIndex)
+                            ) {
+                        smallerChildIndex = getRightChildIndex(currentIndex);
+                    }
+
+                    if (items[currentIndex] < items[smallerChildIndex]) {
+                        break;
+                    } else {
+                        swap(currentIndex, smallerChildIndex);
+                    }
+                    currentIndex = smallerChildIndex;
                 }
-                else {
-                    swap(currentIndex, smallerChildIndex);
-                }
-                currentIndex = smallerChildIndex;
             }
         }
 
