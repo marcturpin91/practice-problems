@@ -29,6 +29,7 @@ public class FibonacciChallenge {
     public static int fibonacci(int n) {
         // Complete the function.
 
+        /* INITIAL SOLUTION
         // Base Cases
         if(n == 0)
             return 0;
@@ -38,7 +39,17 @@ public class FibonacciChallenge {
 
         // Recursive Case
         return fibonacci(n-1) + fibonacci(n-2);
+        */
 
+        // Solution from discussion, way more elegant and efficient
+        int[] fib = new int[2];
+        fib[0] = 0;
+        fib[1] = 1;
+        // 0 and 1 are already accounted for, start at 2
+        for(int i = 2; i <= n; i++){
+            fib[i % 2] = fib[0] + fib[1];
+        }
+        return fib[n % 2];
     }
 
     public static void main(String[] args) {
