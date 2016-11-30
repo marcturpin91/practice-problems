@@ -45,10 +45,194 @@ public class RunningMedianChallenge {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        MinHeap minHeap = new MinHeap();
+        MaxHeap maxHeap = new MaxHeap();
         int n = in.nextInt();
-        int[] a = new int[n];
-        for(int a_i=0; a_i < n; a_i++){
-            a[a_i] = in.nextInt();
+        for (int a_i = 0; a_i < n; a_i++) {
+            // do printing here of running median
+
+            if((a_i & 1) == 1){
+                maxHeap.add(in.nextInt());
+
+            } else {
+                minHeap.add(in.nextInt());
+
+            }
+
+
+            /*** Initial solution - not efficient ***
+             Arrays.sort(a, 0, a_i+1);
+             // if odd, since array index starts at 0, we would have an even amount of #,
+             // thus need to get average of two elements in middle
+             if((a_i & 1) == 1){
+             System.out.println((a[a_i/2] + a[(a_i/2)+1])/2.0);
+             }
+             else {
+             System.out.println(a[a_i/2]/1.0);
+             }
+             */
         }
     }
 }
+
+    // Heap data structures used for solution
+    abstract class Heap{
+        int capacity;
+        int size;
+        int[] items;
+
+        Heap(){
+            this.capacity = 10;
+            this.size = 0;
+            this.items = new int[capacity];
+        }
+
+        public int getLeftChildIndex(int parentIndex){  // for index 1, LC is 3
+            return (parentIndex * 2) + 1;
+        }
+
+        public int getRightChildIndex(int parentIndex){ // for index 1, RC is 4
+            return (parentIndex * 2) + 2;
+        }
+
+        public int getParentIndex(int childIndex){ // for index 3 & 4, parent is 1
+            return (childIndex - 1) / 2;
+        }
+
+        public boolean hasLeftChild(int parentIndex){
+            return getLeftChildIndex(parentIndex) < size;
+        }
+
+        public boolean hasRightChild(int parentIndex){
+            return getRightChildIndex(parentIndex) < size;
+        }
+
+        public boolean hasParent(int childIndex){
+            return getParentIndex(childIndex) >= 0;
+        }
+
+        public int getLeftChild(int parentIndex){
+            return items[getLeftChildIndex(parentIndex)];
+        }
+
+        public int getRightChild(int parentIndex){
+            return items[getRightChildIndex(parentIndex)];
+        }
+
+        public int getParent(int childIndex){
+            return items[getParentIndex(childIndex)];
+        }
+
+        public int peek(){
+            isEmpty("peek()");
+            return items[0];
+        }
+
+        public int poll(){
+            isEmpty("poll()");
+            int temp = items[0];
+            items[0] = items[size - 1];
+            size--;
+            heapifyDown();
+            return temp;
+        }
+
+        public void swap(int indexOne, int indexTwo){
+            int temp = items[indexOne];
+            items[indexOne] = items[indexTwo];
+            items[indexTwo] = temp;
+        }
+
+        public void add(int element){
+            ensureCapacity();
+            items[size] = element;
+            size++;
+            heapifyUp();
+        }
+
+        public void ensureCapacity(){
+            if(size == capacity){
+                capacity = capacity * 2;
+                items = Arrays.copyOf(items, capacity);
+            }
+        }
+
+        public void isEmpty(String methodName){
+            if(size == 0){
+                throw new IllegalStateException("Cannot perform " + methodName + " on empty heap");
+            }
+        }
+
+        public abstract void heapifyDown();
+        public abstract void heapifyUp();
+    }
+
+
+    class MaxHeap extends Heap {
+
+        public void heapifyDown() {
+            // while left child exist and a child is bigger than parent, swap with the smallest of the child that is bigger than parent
+            isEmpty("heapifyDown()");
+            int currentIndex = 0;
+            while(hasLeftChild(currentIndex)){
+                int biggerChildIndex = getLeftChildIndex(currentIndex);
+
+                if(hasRightChild(currentIndex) && getRightChild(currentIndex) > getLeftChild(currentIndex)){
+                    biggerChildIndex = getRightChildIndex(currentIndex);
+                }
+
+                if(items[currentIndex] > items[biggerChildIndex]){
+                    break;
+                }
+                else {
+                    swap(currentIndex, biggerChildIndex);
+                }
+                currentIndex = biggerChildIndex;
+            }
+        }
+
+
+        public void heapifyUp() {
+            // while parent exist and is smaller than child, swap
+            int index = size - 1;
+            while(hasParent(index) && getParent(index) < items[index]){
+                swap(getParentIndex(index), index);
+                index = getParentIndex(index);
+            }
+        }
+    }
+
+
+    class MinHeap extends Heap {
+
+        public void heapifyDown(){
+            // while left child exist and a child is smaller than parent, swap with the smallest child
+            int currentIndex = 0;
+            while(hasLeftChild(currentIndex)) {
+                int smallerChildIndex = getLeftChildIndex(currentIndex);
+
+                if(    hasRightChild(currentIndex)
+                        && getRightChild(currentIndex) < getLeftChild(currentIndex)
+                        ) {
+                    smallerChildIndex = getRightChildIndex(currentIndex);
+                }
+
+                if(items[currentIndex] < items[smallerChildIndex]) {
+                    break;
+                }
+                else {
+                    swap(currentIndex, smallerChildIndex);
+                }
+                currentIndex = smallerChildIndex;
+            }
+        }
+
+        public void heapifyUp(){
+            // while parent exist and is bigger than child, swap
+            int index = size - 1;
+            while( hasParent(index) && getParent(index) > items[index]) {
+                swap(getParentIndex(index), index);
+                index = getParentIndex(index);
+            }
+        }
+    }
