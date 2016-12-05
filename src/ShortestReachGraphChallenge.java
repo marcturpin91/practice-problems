@@ -46,13 +46,72 @@ Sample I/O:
 -1 6
 */
 
+import com.sun.jmx.remote.internal.ArrayQueue;
+import sun.misc.*;
+
 import java.io.*;
-        import java.util.*;
+import java.util.*;
 
 public class ShortestReachGraphChallenge {
 
     public static void main(String[] args) {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
-    
+
+        /* Self note: djikstra, but maybe I can do it dynamic. Using an array of size node, first element should be starting node s.
+        maybe set everything to -1 initially as they are not reachable yet. Using BFS (queue), go through adjacency list and enter all
+        edges directly (s, u) connected to starting node s. Update all indexes 'u' in answer array by min(currentValue, d(s)+d(s,u))
+
+         */
+        Scanner sc = new Scanner(System.in);
+        int amountOfGraphs = sc.nextInt();
+        sc.nextLine();
+
+        for(int i = 0; i < amountOfGraphs; i++){
+            int numOfNodes = sc.nextInt();
+            ArrayList<ArrayList<Integer>> graph = new ArrayList<>(numOfNodes);
+            for(int f = 0; f < numOfNodes; f++){
+                graph.add(new ArrayList<Integer>());
+            }
+            int[] shortestDistances = new int[numOfNodes];
+            // initially set everything to unreachable
+            Arrays.fill(shortestDistances, Integer.MAX_VALUE);
+            int numOfEdges = sc.nextInt();
+            for(int j = 0; j < numOfEdges; j++){ // O(|E|)
+                int vertex = sc.nextInt() - 1;
+                int edgeToVertex = sc.nextInt() - 1;
+                sc.nextLine();
+                // for this vertex, these are the vertices it connects to via an edge
+                graph.get(vertex).add(edgeToVertex);
+            }
+
+            // starting edge
+            int startingVertex = sc.nextInt() - 1;
+            sc.nextLine();
+            shortestDistances[startingVertex] = 0;
+            Deque<Integer> bfsVertex = new ArrayDeque<>();
+            bfsVertex.push(startingVertex);
+
+            // BFS for graph - Only concerned about vertices connected to starting node s in someway
+            while(!bfsVertex.isEmpty()){
+                int currentVertex = bfsVertex.pop();
+                for(int k = 0; k < (graph.get(currentVertex)).size(); k++){
+                    int edgeToVertex = (graph.get(currentVertex)).get(k) - 1;
+                    shortestDistances[edgeToVertex] = Math.min(shortestDistances[edgeToVertex], shortestDistances[currentVertex] + 6);
+                    bfsVertex.push(edgeToVertex);
+                }
+            }
+
+            for(int h = 0; h < shortestDistances.length; h++){
+                if(shortestDistances[h] > 0){
+                    if(shortestDistances[h] != Integer.MAX_VALUE){
+                        System.out.print(shortestDistances[h] + " ");
+                    } else {
+                        System.out.print("-1 ");
+                    }
+                }
+            }
+
+        }
+
     }
 }
