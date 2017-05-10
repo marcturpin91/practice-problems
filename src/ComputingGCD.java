@@ -26,14 +26,12 @@ public class ComputingGCD {
         Scanner input = new Scanner(System.in);
         int a = input.nextInt();
         int b = input.nextInt();
-        computeGCD(a,b);
+        int numerator = Math.max(a,b);
+        int denominator = Math.min(a,b);
+        computeGCD(numerator,denominator);
     }
 
     // Method that computes and prints the GCD using the Euclidean algorithm
-    public static void computeGCD(int a, int b){}
-
-    // need to recursively use the algorithm here. Base case is when remainder is 0 -> print the previous remainder here
-
     /* example of algorithm:
     GCD(10; 45)
     45 = 10 * q + r
@@ -42,4 +40,12 @@ public class ComputingGCD {
     10 = 5 * 2 + 0
     GCD(10;45) = 5
      */
+    public static void computeGCD(int num, int denom) {
+        int remainder = num % denom;
+        if(remainder == 0){
+            System.out.println(denom);
+        } else {
+            computeGCD(denom, remainder);
+        }
+    }
 }
