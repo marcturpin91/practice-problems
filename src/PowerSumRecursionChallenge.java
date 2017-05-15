@@ -36,25 +36,24 @@ public class PowerSumRecursionChallenge {
     }
 
     public static int powerSum(int x, int power){
-        // we can use the root of the number x to determine maximum possible int in the combination
-        // if root is perfect (ie no fraction), that is one of the sums
-        // ex with power(25, 2) -> sqrt(25) = 5
-
-        // Maybe should use helper method
-        // need to go from root to 0, calling powerSum for each i
-
-        // not sure if necessary here, more so in helper method since that will be recursive, not this one
-        if(x == 0){
-            return 1;
-        }
-
-        // initial root of x
-        int root = (int)(Math.floor(Math.pow(x, (1/power))));
-
-        for(int i = root; i > 0; i--){
-            // call helper method here
-            // p
-        }
-        return 0;
+        return powerSumHelper(x, power, 0);
     }
+
+    // 'x' is remaining sum and 'i' is the current iteration. Iterations go from 0 to i^power, where i^power <= x
+    public static int powerSumHelper(int x, int power, int i){
+
+        x = x - (int)(Math.pow(i, power));
+
+        if(x == 0){ return 1; }
+        if(x < 0){ return 0; }
+
+        int numOfSums = 0;
+
+        for(int j = i + 1; Math.pow(j, power) <= x; j++){
+            numOfSums += powerSumHelper(x, power, j);
+        }
+
+        return numOfSums;
+    }
+
 }
